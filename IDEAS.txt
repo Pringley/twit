@@ -1,0 +1,69 @@
+# Twit: simplified git wrapper
+
+## UI
+
+### Local
+
+twit init
+
+    git init
+
+twit list
+
+    git branch
+
+twit new <branch>
+
+    git checkout -b <branch>
+
+twit save <message>
+
+    git add --all && git commit -m <message>
+
+twit saveas <branch>
+
+    git checkout -b <branch> && git add --all && git commit -m "New branch: <branch>"
+
+twit overwrite <branch>
+
+    PATCH="$(mktemp /tmp/patchXXXXXX)"
+    git add --all && git diff --cached <branch> > $PATCH && git reset --hard && git checkout <branch> && git apply "${PATCH}" && rm "${PATCH}" && git add --all && git commit -m "Overwrite <branch>"
+
+twit open <branch>
+
+    git checkout <branch>
+
+twit delete <branch>
+
+    git branch -d <branch>
+
+twit discard
+
+    git reset --hard HEAD
+
+twit history
+
+    git log --pretty=format:'%C(yellow)%h %Cred%ad%Cblue%d %Creset%s %Cgreen[%an]' --date=relative --graph --branches
+
+twit merge <from-branch>
+
+    git merge --no-ff <from-branch>
+
+### Remote
+
+twit connect <url>
+
+    git remote add origin <url>
+
+twit sync <branch>
+
+    git pull --rebase origin <branch> && git push origin <branch>
+
+twit publish <tag> <message>
+
+    git tag -a <tag> <message> && git push origin tag
+
+## Impl
+
+- Ruby
+- Thor
