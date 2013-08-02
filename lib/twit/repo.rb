@@ -13,7 +13,7 @@ module Twit
     # root. If not, try to detect the root of the current repository.
     #
     # When run without arguments in a directory not part of a git repository,
-    # raise Twit::NotARepositoryError.
+    # raise {Twit::NotARepositoryError}.
     def initialize root = nil
       if root.nil?
         stdout, stderr, status = Open3.capture3 "git rev-parse --show-toplevel"
