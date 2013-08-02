@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Twit::VERSION
   spec.authors       = ["Ben Pringle"]
   spec.email         = ["ben.pringle@gmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{Create a simpler abstraction over the git command}
+  spec.summary       = %q{Simplified git wrapper}
   spec.homepage      = ""
   spec.license       = "MIT"
 
