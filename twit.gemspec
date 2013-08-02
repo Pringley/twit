@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["ben.pringle@gmail.com"]
   spec.description   = %q{Create a simpler abstraction over the git command}
   spec.summary       = %q{Simplified git wrapper}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/Pringley/twit"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
