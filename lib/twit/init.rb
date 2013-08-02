@@ -15,6 +15,7 @@ module Twit
         raise Error, stderr
       end
     end
+    Repo.new dir
   end
 
 end

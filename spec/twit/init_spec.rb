@@ -1,6 +1,7 @@
 require 'tmpdir'
 
 require 'twit/init'
+require 'twit/repo'
 
 describe Twit do
   describe "::init" do
@@ -31,6 +32,11 @@ describe Twit do
         Twit.init
         expect_cwd_to_be_repo
       end
+    end
+
+    it "returns a repo object" do
+      repo = Twit.init @tmpdir
+      expect(repo).to be_instance_of(Twit::Repo)
     end
 
   end

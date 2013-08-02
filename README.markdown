@@ -21,7 +21,7 @@ All command-line functions are available for use as a Ruby library as well.
     require 'twit'
 
     # Create a new repository
-    Twit.init
+    repo = Twit.init
 
 ## Development
 
