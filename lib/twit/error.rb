@@ -7,4 +7,7 @@ module Twit
   # repository.
   class NotARepositoryError < Error; end
 
+  # Raised when trying to commit nothing.
+  class NothingToCommitError < Error; end
+
 end

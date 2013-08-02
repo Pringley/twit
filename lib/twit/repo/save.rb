@@ -10,7 +10,11 @@ module Twit
         cmd = "git add --all && git commit -m \"#{message}\""
         stdout, stderr, status = Open3.capture3 cmd
         if status != 0
-          raise Error, stderr
+          if /nothing to commit/.match stdout
+            raise NothingToCommitError
+          else
+            raise Error, stderr
+          end
         end
       end
     end

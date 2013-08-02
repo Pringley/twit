@@ -2,6 +2,7 @@ require 'tmpdir'
 require 'securerandom'
 
 require 'twit/repo'
+require 'twit/error'
 
 describe Twit::Repo, "#save" do
 
@@ -32,6 +33,23 @@ describe Twit::Repo, "#save" do
       @repo.save msg
       expect(`git log`).to include(msg)
     end
+  end
+
+  it "raises error in new repository" do
+    expect {
+      @repo.save "trying to save"
+    }.to raise_error(Twit::NothingToCommitError)
+  end
+
+  it "raises error with nothing to commit" do
+    # First, make sure there's at least one commit on the log.
+    File.open("foo", 'w') { |f| f.write("bar\n") }
+    `git add foo && git commit -m "add foo"`
+
+    # Now there should be nothing more to commit
+    expect {
+      @repo.save "trying to save"
+    }.to raise_error(Twit::NothingToCommitError)
   end
 
 end

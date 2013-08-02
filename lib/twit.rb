@@ -1,6 +1,7 @@
 require "twit/version"
 require "twit/repo"
 require "twit/init"
+require "twit/error"
 
 # This module exposes twit commands as methods.
 module Twit
