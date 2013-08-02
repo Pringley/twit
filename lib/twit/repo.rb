@@ -22,7 +22,7 @@ module Twit
           when /Not a git repository/
             raise NotARepositoryError
           else
-            raise Error, root
+            raise Error, stderr
           end
         end
         root = stdout.strip
