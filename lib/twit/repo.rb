@@ -1,5 +1,6 @@
 require 'open3'
 require 'twit/error'
+require 'twit/repo/save'
 
 module Twit
 
