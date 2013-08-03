@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Ben Pringle"]
   spec.email         = ["ben.pringle@gmail.com"]
   spec.description   = %q{Create a simpler abstraction over the git command}
-  spec.summary       = %q{Simplified git wrapper}
+  spec.summary       = %q{Training wheels for git}
   spec.homepage      = "https://github.com/Pringley/twit"
   spec.license       = "MIT"
 

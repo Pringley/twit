@@ -1,4 +1,4 @@
-# Twit: simplified git wrapper
+# Twit: training wheels for git
 
 Twit makes [git](http://git-scm.com) easier for beginners.
 
