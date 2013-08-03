@@ -18,13 +18,62 @@ To install, simply run:
 
 Initialize a new git repository in the current directory.
 
-### `save` -- take a snapshot of all files
+Equivalent to: `git init`
 
-    twit save <DESCRIBE_CHANGES>
+### `save` -- commit all new changes to the current branch
+
+    twit save [DESCRIBE_CHANGES]
 
 Take a snapshot of all files in the directory.
 
 Any changes on the working tree will be committed to the current branch.
+
+Equivalent to: `git add --all && git commit -m <DESCRIBE_CHANGES>`
+
+### `saveas` -- commit all new changes to a new branch
+
+    twit saveas [NEW_BRANCH] [DESCRIBE_CHANGES]
+
+Equivalent to: `git checkout -b <NEW_BRANCH>` then `twit save`
+
+*Not yet implemented.*
+
+### `open` -- open another branch
+
+    twit open [BRANCH]
+
+Equivalent to: `git checkout <branch>`
+
+*Not yet implemented.*
+
+### `include` -- incorperate changes from another branch
+
+    twit include [OTHER_BRANCH]
+
+Incorperate changes from another branch, but do not save them yet. (The user
+can resolve any conflicts and then run `twit save` themselves.)
+
+Equivalent to: `git merge --no-ff --no-commit [OTHER_BRANCH]`
+
+*Not yet implemented.*
+
+### `discard` -- permanently delete unsaved changes
+
+    twit discard
+
+**Permanently** delete any unsaved changes to the current branch. Be careful!
+
+Equivalent to: `git reset --hard`
+
+*Not yet implemented.*
+
+### `list` -- show all branches
+
+    twit list
+
+Equivalent to: `git branch`
+
+*Not yet implemented.*
 
 ## API
 
