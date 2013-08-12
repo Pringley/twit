@@ -20,7 +20,7 @@ module Twit
         exit false
       end
       begin
-        Twit.repo.save message
+        Twit.save message
       rescue NothingToCommitError
         puts "No new edits to save"
       end
@@ -29,7 +29,7 @@ module Twit
     desc "discard", "PERMANTENTLY delete all changes since last save"
     # Pass method to default repo
     def discard
-      Twit.repo.discard
+      Twit.discard
     end
 
   end

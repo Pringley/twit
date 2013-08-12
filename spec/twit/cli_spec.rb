@@ -18,14 +18,9 @@ describe Twit::CLI do
   end
 
   describe "save" do
-    it "calls Twit.repo.save" do
+    it "calls Twit.save" do
       message = "my test commit message"
-      repo = double('repo')
-
-      # Expected call is `Twit.repo.save message`
-      repo.should_receive(:save).with(message)
-      Twit.should_receive(:repo).and_return(repo)
-
+      Twit.should_receive(:save).with(message)
       @cli.invoke :save, [message]
     end
     it "asks for commit message" do
@@ -37,13 +32,8 @@ describe Twit::CLI do
   end
 
   describe "discard" do
-    it "calls Twit.repo.discard" do
-      repo = double('repo')
-
-      # Expected call is `Twit.repo.discard`
-      repo.should_receive(:discard)
-      Twit.should_receive(:repo).and_return(repo)
-
+    it "calls Twit.discard" do
+      Twit.should_receive(:discard)
       @cli.invoke :discard
     end
   end
