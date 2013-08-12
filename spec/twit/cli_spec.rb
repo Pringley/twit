@@ -36,4 +36,16 @@ describe Twit::CLI do
     end
   end
 
+  describe "discard" do
+    it "calls Twit.repo.discard" do
+      repo = double('repo')
+
+      # Expected call is `Twit.repo.discard`
+      repo.should_receive(:discard)
+      Twit.should_receive(:repo).and_return(repo)
+
+      @cli.invoke :discard
+    end
+  end
+
 end

@@ -26,6 +26,12 @@ module Twit
       end
     end
 
+    desc "discard", "PERMANTENTLY delete all changes since last save"
+    # Pass method to default repo
+    def discard
+      Twit.repo.discard
+    end
+
   end
 
 end
