@@ -45,6 +45,17 @@ module Twit
       end
     end
 
+    # Return an Array of branches in the repo.
+    def list
+      `git branch`.split.map { |s|
+        # Remove trailing/leading whitespace and astericks
+        s.sub('*', '').strip
+      }.reject { |s|
+        # Drop elements created due to trailing newline
+        s.size == 0
+      }
+    end
+
   end
 
 end

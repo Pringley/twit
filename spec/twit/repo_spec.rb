@@ -110,4 +110,40 @@ describe Twit::Repo do
 
   end
 
+  describe "#list" do
+
+    before do
+      @tmpdir = Dir.mktmpdir
+      @repo = Twit.init @tmpdir
+      @oldwd = Dir.getwd
+      Dir.chdir @tmpdir
+
+    end
+
+    after do
+      Dir.chdir @oldwd
+      FileUtils.remove_entry @tmpdir
+    end
+
+    it "should return an Array of branches" do
+      # Make sure there's at least one commit on master.
+      File.open("foo", 'w') { |f| f.write("bar\n") }
+
+      @repo.save "Initial commit"
+
+      branches = ['all', 'your', 'branch', 'are',
+                   'belong', 'to', 'us']
+      branches.each do |branch|
+        `git branch #{branch}`
+      end
+
+      expect(@repo.list).to match_array(branches + ['master'])
+    end
+
+    it "should return empty on an empty repo" do
+      expect(@repo.list).to match_array([])
+    end
+
+  end
+
 end
