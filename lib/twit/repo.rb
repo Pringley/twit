@@ -56,6 +56,14 @@ module Twit
       }
     end
 
+    # Clean the working directory (permanently deletes changes!!!).
+    def discard
+      # First, add all files to the index. (Otherwise, we won't discard new files.)
+      `git add --all`
+      # Next, hard reset to revert to the last saved state.
+      `git reset --hard`
+    end
+
   end
 
 end

@@ -145,5 +145,44 @@ describe Twit::Repo do
     end
 
   end
+  
+  describe "#discard" do
+
+    before do
+      @tmpdir = Dir.mktmpdir
+      @repo = Twit.init @tmpdir
+      @oldwd = Dir.getwd
+      Dir.chdir @tmpdir
+    end
+
+    after do
+      Dir.chdir @oldwd
+      FileUtils.remove_entry @tmpdir
+    end
+
+    context "with one commit and dirty working tree" do
+
+      before do
+        # Make sure there's at least one commit on master.
+        File.open("foo", 'w') { |f| f.write("bar\n") }
+        @repo.save "Initial commit"
+
+        # Pollute the working tree with spam
+        File.open("spam", 'w') { |f| f.write("eggs\n") }
+      end
+
+      it "should clean the working tree" do
+        @repo.discard
+        expect(`git status`).to include('working directory clean')
+      end
+
+      it "should delete the spam file" do
+        @repo.discard
+        expect(Pathname "spam").not_to exist
+      end
+
+    end
+
+  end
 
 end
