@@ -28,4 +28,14 @@ module Twit
     Repo.new dir
   end
 
+  # Save a snapshot on the default repo.
+  def self.save message
+    self.repo.save message
+  end
+
+  # PERMANENTLY discard changes to default repo since last save
+  def self.discard
+    self.repo.discard
+  end
+
 end

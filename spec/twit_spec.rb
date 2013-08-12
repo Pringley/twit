@@ -48,4 +48,27 @@ describe Twit do
 
   end
 
+  describe "::save" do
+    it "passes to default Repo object" do
+      message = "my test commit message"
+      repo = double('repo')
+
+      repo.should_receive(:save).with(message)
+      Twit.should_receive(:repo).and_return(repo)
+
+      Twit.save message
+    end
+  end
+
+  describe "::discard" do
+    it "passes to default Repo object" do
+      repo = double('repo')
+
+      repo.should_receive(:discard)
+      Twit.should_receive(:repo).and_return(repo)
+
+      Twit.discard
+    end
+  end
+
 end
