@@ -1,6 +1,39 @@
-# Twit: training wheels for git
+# Twit: training wheels for Git
 
-Twit makes [git](http://git-scm.com) easier for beginners.
+Twit is a wrapper for [Git](http://git-scm.com) that abstracts concepts that
+many newcomers find tedious or confusing.
+
+When explaining version control to newcomers, the benefits are often unclear
+amid the complicated rules and syntax of a powerful tool like Git. Twit aims to
+provide an *easy and functional* demonstration of the usefulness of a branching
+version control system.
+
+For example, you can say that "version control allows you to save snapshots of
+your project history." However, in order to do this, you need to understand
+Git's two-step stage-then-commit workflow, with all its corner cases regarding
+new/deleted/moved files.
+
+Instead, Twit exposes a simple command to create a new commit with a snapshot
+of the repository:
+
+    twit save
+
+This stages any changes (including new files and deletions) and creates a
+commit, prompting the user for a commit message if needed.
+
+To create a new branch (and save any changes to the new branch as well):
+
+    twit saveas my_new_branch
+
+This quick-and-easy approach allows a new user to get started using version
+control right away, without having to learn Git's minutiae.
+
+However, this simple program is **not** meant to replace Git for the power
+user. The interface was designed to be user-friendly at the cost of
+flexibility. If you are a programmer, you should probably just buckle down and
+[learn git](http://gitref.org). Instead, Twit serves as an introduction to
+version control for users that would probably never learn Git, like writers or
+students.
 
 ## Installation
 
@@ -36,15 +69,11 @@ Equivalent to: `git add --all && git commit -m <DESCRIBE_CHANGES>`
 
 Equivalent to: `git checkout -b <NEW_BRANCH>` then `twit save`
 
-*Not yet implemented.*
-
 ### `open` -- open another branch
 
     twit open [BRANCH]
 
 Equivalent to: `git checkout <branch>`
-
-*Not yet implemented.*
 
 ### `include` -- incorperate changes from another branch
 
@@ -55,8 +84,6 @@ can resolve any conflicts and then run `twit save` themselves.)
 
 Equivalent to: `git merge --no-ff --no-commit [OTHER_BRANCH]`
 
-*Not yet implemented.*
-
 ### `discard` -- permanently delete unsaved changes
 
     twit discard
@@ -65,15 +92,11 @@ Equivalent to: `git merge --no-ff --no-commit [OTHER_BRANCH]`
 
 Equivalent to: `git reset --hard`
 
-*Not yet implemented.*
-
 ### `list` -- show all branches
 
     twit list
 
 Equivalent to: `git branch`
-
-*Not yet implemented.*
 
 ## API
 
@@ -89,6 +112,9 @@ All command-line functions are available for use as a Ruby library as well.
 
     # Take a snapshot
     Twit.save "Add some foo"
+
+    # Create a new branch
+    Twit.saveas "feature-branch"
 
 ## Development
 
