@@ -46,6 +46,13 @@ describe Twit do
       expect(repo).to be_instance_of(Twit::Repo)
     end
 
+    it "does not raise error on double-initialize" do
+      Twit.init @tmpdir
+      expect {
+        Twit.init @tmpdir
+      }.not_to raise_error
+    end
+
   end
 
   shared_context "stub repo" do
@@ -130,6 +137,33 @@ describe Twit do
     it "passes to default Repo object" do
       expect(@repo).to receive(:'nothing_to_commit?')
       Twit.nothing_to_commit?
+    end
+  end
+
+  describe "::is_repo?" do
+    context "with no repo" do
+      before do
+        @tmpdir = Dir.mktmpdir
+      end
+      after do
+        FileUtils.remove_entry @tmpdir
+      end
+      it "returns false on empty directory" do
+        expect(Twit.is_repo? @tmpdir).to be_false
+      end
+      it "detects the current directory" do
+        Dir.chdir @tmpdir do
+          expect(Twit.is_repo?).to be_false
+        end
+      end
+    end
+    context "with a real repo" do
+      it "takes a directory as argument" do
+        expect(Twit.is_repo? @tmpdir).to be_true
+      end
+      it "detects the current directory" do
+        expect(Twit.is_repo?).to be_true
+      end
     end
   end
 

@@ -11,6 +11,10 @@ module Twit
     # See {Twit::init}
     def init
       begin
+        if Twit.is_repo?
+          say "You are already in a repository! (Root directory: #{Twit.repo.root})"
+          return
+        end
         Twit.init
       rescue Error => e
         say "Error: #{e.message}"

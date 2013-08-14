@@ -17,8 +17,16 @@ module Twit
   # representing the new repository.
   #
   # If no argument is supplied, use the working directory.
+  #
+  # If init is called on a directory that is already part of a repository,
+  # simply do nothing.
   def self.init dir = nil
     dir ||= Dir.getwd
+
+    if is_repo? dir
+      return
+    end
+
     Dir.chdir dir do
       stdout, stderr, status = Open3.capture3 "git init"
       if status != 0
@@ -26,6 +34,24 @@ module Twit
       end
     end
     Repo.new dir
+  end
+
+  # Check if a given directory is a git repository.
+  #
+  # If no argument is supplied, use the working directory.
+  def self.is_repo? dir = nil
+    dir ||= Dir.getwd
+    Dir.chdir dir do
+      stdout, stderr, status = Open3.capture3 "git status"
+      if status != 0
+        if /Not a git repository/.match stderr
+          return false
+        else
+          raise Error, stderr
+        end
+      end
+      return true
+    end
   end
 
   # See {Twit::Repo#save}.

@@ -11,9 +11,14 @@ describe Twit::CLI do
   end
 
   describe "init" do
-    it "calls Twit.init" do
-      expect(Twit).to receive(:init)
-      @cli.invoke :init
+    context "is not repo" do
+      before do
+        Twit.stub(:'is_repo?') { false }
+      end
+      it "calls Twit.init" do
+        expect(Twit).to receive(:init)
+        @cli.invoke :init
+      end
     end
   end
 
