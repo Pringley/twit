@@ -221,4 +221,29 @@ describe Twit::Repo do
 
   end
 
+  describe "#open" do
+
+    include_context "temp repo"
+
+    it "opens a branch" do
+      new_branch1 = "branch-#{SecureRandom.hex(4)}"
+      File.open("foo", 'w') { |f| f.write("bar\n") }
+      @repo.saveas new_branch1
+
+      new_branch2 = "branch-#{SecureRandom.hex(4)}"
+      @repo.saveas new_branch2
+
+      @repo.open new_branch1
+      current_branch = `git rev-parse --abbrev-ref HEAD`.strip
+      expect(current_branch).to eq(new_branch1)
+    end
+
+    it "raises error when branch does not exist" do
+      expect {
+        @repo.open "spam"
+      }.to raise_error(Twit::InvalidParameter)
+    end
+
+  end
+
 end

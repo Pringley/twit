@@ -115,6 +115,24 @@ module Twit
       end
     end
 
+    # Open a branch.
+    def open branch
+      Dir.chdir @root do
+        cmd = "git checkout \"#{branch}\""
+        stdout, stderr, status = Open3.capture3 cmd
+        if status != 0
+          case stderr
+          when /Not a git repository/
+            raise NotARepositoryError
+          when /pathspec '#{branch}' did not match any/
+            raise InvalidParameter, "#{branch} does not exist"
+          else
+            raise Error, stderr
+          end
+        end
+      end
+    end
+
     # Clean the working directory (permanently deletes changes!!!).
     def discard
       Dir.chdir @root do
