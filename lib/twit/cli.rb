@@ -21,7 +21,7 @@ module Twit
       end
     end
 
-    desc "save <DESCRIBE_CHANGES>", "Take a snapshot of all files"
+    desc "save [DESCRIBE_CHANGES]", "Take a snapshot of all files"
     # See {Twit::Repo#save}.
     def save message = nil
       begin
@@ -38,7 +38,7 @@ module Twit
       end
     end
 
-    desc "saveas <NEW_BRANCH> <DESCRIBE_CHANGES>", "Save snapshot to new branch"
+    desc "saveas [NEW_BRANCH] [DESCRIBE_CHANGES]", "Save snapshot to new branch"
     # See {Twit::Repo#saveas}.
     def saveas branch = nil, message = nil
       while branch.nil? || branch.strip == ""
@@ -59,6 +59,79 @@ module Twit
         end
       rescue Error => e
         say "Error: #{e.message}"
+      end
+    end
+
+    desc "open [BRANCH]", "Open a branch"
+    # See {Twit::Repo#open}.
+    def open branch = nil
+      while branch.nil? || branch.strip == ""
+        branch = ask "Please enter the name of the branch to open:"
+      end
+      begin
+        Twit.open branch
+      rescue Error => e
+        say "Error: #{e.message}"
+      else
+        say "Opened #{branch}."
+      end
+    end
+
+    desc "list", "Display a list of branches"
+    # See {Twit::Repo#list} and {Twit::Repo#current_branch}
+    def list
+      begin
+        @current = Twit.current_branch
+        @others = Twit.list.reject { |b| b == @current }
+      rescue Error => e
+        say "Error: #{e.message}"
+        return
+      end
+      say "Current branch: #{@current}"
+      say "Other branches:"
+      @others.each do |branch|
+        say "- #{branch}"
+      end
+    end
+
+    desc "include", "Integrate changes from another branch"
+    # See {Twit::Repo#include}.
+    def include other_branch = nil
+      while other_branch.nil? || other_branch.strip == ""
+        other_branch = ask "Please enter the name of the branch to pull changes from:"
+      end
+      begin
+        @success = Twit.include other_branch
+      rescue Error => e
+        say "Error: #{e.message}"
+        return
+      end
+      if @success
+        say "Changes from #{other_branch} successfully included into #{Twit.current_branch}."
+        say "Use \"twit save\" to save them."
+      else
+        say "Conflicts detected! Fix them, then use \"twit save\" to save the changes."
+      end
+    end
+
+    desc "include_into", "Integrate changes into another branch"
+    # See {Twit::Repo#include}.
+    def include_into other_branch = nil
+      while other_branch.nil? || other_branch.strip == ""
+        other_branch = ask "Please enter the name of the branch to push changes into:"
+      end
+      begin
+        @original = Twit.current_branch
+        @success = Twit.include_into other_branch
+      rescue Error => e
+        say "Error: #{e.message}"
+        return
+      end
+      if @success
+        say "Changes from #{@original} successfully included into #{other_branch}."
+        say "Use \"twit save\" to save them."
+      else
+        say "Conflicts detected! Fix them, then use \"twit save\" to save the changes."
       end
     end
 
