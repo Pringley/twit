@@ -10,20 +10,28 @@ module Twit
     desc "init", "Create an empty repository in the current directory"
     # See {Twit::init}
     def init
-      Twit.init
+      begin
+        Twit.init
+      rescue Error => e
+        say "Error: #{e.message}"
+      end
     end
 
     desc "save <DESCRIBE_CHANGES>", "Take a snapshot of all files"
     # See {Twit::Repo#save}.
     def save message = nil
-      if Twit.nothing_to_commit?
-        say "No new edits to save"
-        return
+      begin
+        if Twit.nothing_to_commit?
+          say "No new edits to save"
+          return
+        end
+        while message.nil? || message.strip == ""
+          message = ask "Please supply a message describing your changes:"
+        end
+        Twit.save message
+      rescue Error => e
+        say "Error: #{e.message}"
       end
-      while message.nil? || message.strip == ""
-        message = ask "Please supply a message describing your changes:"
-      end
-      Twit.save message
     end
 
     desc "saveas <NEW_BRANCH> <DESCRIBE_CHANGES>", "Save snapshot to new branch"
@@ -32,24 +40,32 @@ module Twit
       while branch.nil? || branch.strip == ""
         branch = ask "Please supply the name for your new branch:"
       end
-      if (not Twit.nothing_to_commit?) && message.nil?
-        message = ask "Please supply a message describing your changes:"
-      end
       begin
-        Twit.saveas branch, message
-      rescue InvalidParameter => e
-        if /already exists/.match e.message
-          say "Cannot saveas to existing branch. See \"twit help include_into\""
-        else
-          say "Error: #{e.message}"
+        if (not Twit.nothing_to_commit?) && message.nil?
+          message = ask "Please supply a message describing your changes:"
         end
+        begin
+          Twit.saveas branch, message
+        rescue InvalidParameter => e
+          if /already exists/.match e.message
+            say "Cannot saveas to existing branch. See \"twit help include_into\""
+          else
+            say "Error: #{e.message}"
+          end
+        end
+      rescue Error => e
+        say "Error: #{e.message}"
       end
     end
 
     desc "discard", "PERMANTENTLY delete all changes since last save"
     # See {Twit::Repo#discard}.
     def discard
-      Twit.discard
+      begin
+        Twit.discard
+      rescue Error => e
+        say "Error: #{e.message}"
+      end
     end
 
   end
