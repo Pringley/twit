@@ -12,28 +12,27 @@ describe Twit::CLI do
 
   describe "init" do
     it "calls Twit.init" do
-      Twit.should_receive(:init)
+      expect(Twit).to receive(:init)
       @cli.invoke :init
     end
   end
 
   describe "save" do
-    it "calls Twit.save" do
-      message = "my test commit message"
-      Twit.should_receive(:save).with(message)
-      @cli.invoke :save, [message]
-    end
-    it "asks for commit message" do
-      $stderr.should_receive(:puts).with /message/
-      expect {
-        @cli.invoke :save
-      }.to raise_error SystemExit
+    context "need to commit" do
+      before do
+        Twit.stub(:'nothing_to_commit?') { false }
+      end
+      it "calls Twit.save" do
+        message = "my test commit message"
+        expect(Twit).to receive(:save).with(message)
+        @cli.invoke :save, [message]
+      end
     end
   end
 
   describe "discard" do
     it "calls Twit.discard" do
-      Twit.should_receive(:discard)
+      expect(Twit).to receive(:discard)
       @cli.invoke :discard
     end
   end
