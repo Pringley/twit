@@ -155,4 +155,57 @@ describe Twit::Repo do
 
   end
 
+  describe "#saveas" do
+    
+    include_context "temp repo"
+
+    context "files in working tree" do
+      before do
+        3.times do |i|
+          File.open("file#{i}.txt", 'w') { |f| f.write("file#{i} contents\n") }
+        end
+      end
+      it "commits the entire working tree" do
+        @repo.saveas "newbranch"
+        expect(`git status`).to include('working directory clean')
+      end
+      it "makes a commit" do
+        msg = "commit msg #{SecureRandom.hex(4)}"
+        @repo.saveas "newbranch", msg
+        expect(`git log`).to include(msg)
+      end
+      it "creates a new branch" do
+        new_branch = "branch-#{SecureRandom.hex(4)}"
+        @repo.saveas new_branch
+        current_branch = `git rev-parse --abbrev-ref HEAD`.strip
+        expect(current_branch).to eq(new_branch)
+      end
+    end
+
+    it "raises an error with an invalid branch name" do
+      expect {
+        @repo.saveas "new branch"
+      }.to raise_error(Twit::InvalidParameter)
+    end
+
+    it "does not raise error in new repository" do
+      expect {
+        @repo.saveas "newbranch"
+      }.not_to raise_error
+    end
+
+    it "does not raise error with nothing to commit" do
+      # First, make sure there's at least one commit on the log.
+      File.open("foo", 'w') { |f| f.write("bar\n") }
+      `git add foo && git commit -m "add foo"`
+
+      # Now there should be nothing more to commit, but no error should be
+      # raised.
+      expect {
+        @repo.saveas "newbranch"
+      }.not_to raise_error
+    end
+
+  end
+
 end

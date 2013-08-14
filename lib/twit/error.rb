@@ -10,4 +10,7 @@ module Twit
   # Raised when trying to commit nothing.
   class NothingToCommitError < Error; end
 
+  # Raised when a command receives an invalid parameter.
+  class InvalidParameter < Error; end
+
 end

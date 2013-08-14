@@ -45,6 +45,30 @@ module Twit
       end
     end
 
+    # Save the current state of the repository to a new branch.
+    def saveas newbranch, message = nil
+      message ||= "Create new branch: #{newbranch}"
+      # First, create the new branch and switch to it.
+      Dir.chdir @root do
+        cmd = "git checkout -b \"#{newbranch}\""
+        stdout, stderr, status = Open3.capture3 cmd
+        if status != 0
+          case stderr
+          when /not a valid branch name/
+            raise InvalidParameter, "#{newbranch} is not a valid branch name"
+          else
+            raise Error, stderr
+          end
+        end
+      end
+      # Next, save any working changes.
+      begin
+        Twit.save message
+      rescue NothingToCommitError
+        # New changes are not required for saveas.
+      end
+    end
+
     # Return an Array of branches in the repo.
     def list
       Dir.chdir @root do
