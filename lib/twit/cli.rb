@@ -8,26 +8,46 @@ module Twit
     include Thor::Actions
 
     desc "init", "Create an empty repository in the current directory"
-    # Pass method to Twit module
+    # See {Twit::init}
     def init
       Twit.init
     end
 
     desc "save <DESCRIBE_CHANGES>", "Take a snapshot of all files"
-    # Pass method to default repo
+    # See {Twit::Repo#save}.
     def save message = nil
       if Twit.nothing_to_commit?
         say "No new edits to save"
         return
       end
-      while message.nil? or message.strip == ""
+      while message.nil? || message.strip == ""
         message = ask "Please supply a message describing your changes:"
       end
       Twit.save message
     end
 
+    desc "saveas <NEW_BRANCH> <DESCRIBE_CHANGES>", "Save snapshot to new branch"
+    # See {Twit::Repo#saveas}.
+    def saveas branch = nil, message = nil
+      while branch.nil? || branch.strip == ""
+        branch = ask "Please supply the name for your new branch:"
+      end
+      if (not Twit.nothing_to_commit?) && message.nil?
+        message = ask "Please supply a message describing your changes:"
+      end
+      begin
+        Twit.saveas branch, message
+      rescue InvalidParameter => e
+        if /already exists/.match e.message
+          say "Cannot saveas to existing branch. See \"twit help include_into\""
+        else
+          say "Error: #{e.message}"
+        end
+      end
+    end
+
     desc "discard", "PERMANTENTLY delete all changes since last save"
-    # Pass method to default repo
+    # See {Twit::Repo#discard}.
     def discard
       Twit.discard
     end

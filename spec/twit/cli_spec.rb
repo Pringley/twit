@@ -30,6 +30,16 @@ describe Twit::CLI do
     end
   end
 
+  describe "saveas" do
+    it "calls Twit.saveas" do
+      Twit.stub(:'nothing_to_commit?') { false }
+      branch = "my_branch"
+      message = "my test commit message"
+      expect(Twit).to receive(:saveas).with(branch, message)
+      @cli.invoke :saveas, [branch, message]
+    end
+  end
+
   describe "discard" do
     it "calls Twit.discard" do
       expect(Twit).to receive(:discard)
