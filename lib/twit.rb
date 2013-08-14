@@ -63,4 +63,9 @@ module Twit
     self.repo.current_branch
   end
 
+  # See {Twit::Repo#nothing_to_commit?}.
+  def self.nothing_to_commit?
+    self.repo.nothing_to_commit?
+  end
+
 end

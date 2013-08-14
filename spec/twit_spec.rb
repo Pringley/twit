@@ -116,4 +116,12 @@ describe Twit do
     end
   end
 
+  describe "::nothing_to_commit?" do
+    include_context "stub repo"
+    it "passes to default Repo object" do
+      expect(@repo).to receive(:'nothing_to_commit?')
+      Twit.nothing_to_commit?
+    end
+  end
+
 end

@@ -221,6 +221,22 @@ describe Twit::Repo do
 
   end
 
+  describe "#nothing_to_commit?" do
+    include_context "temp repo"
+    it "returns true in fresh repo" do
+      expect(@repo.nothing_to_commit?).to be_true
+    end
+    it "returns false with file in working tree" do
+      File.open("foo", 'w') { |f| f.write("bar\n") }
+      expect(@repo.nothing_to_commit?).to be_false
+    end
+    it "returns true after one commit" do
+      File.open("foo", 'w') { |f| f.write("bar\n") }
+      @repo.save "commit"
+      expect(@repo.nothing_to_commit?).to be_true
+    end
+  end
+
   describe "#open" do
 
     include_context "temp repo"
