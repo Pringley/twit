@@ -53,6 +53,11 @@ module Twit
     self.repo.include branch
   end
 
+  # See {Twit::Repo#include_into}.
+  def self.include_into branch
+    self.repo.include_into branch
+  end
+
   # See {Twit::Repo#list}.
   def self.list
     self.repo.list

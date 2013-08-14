@@ -174,6 +174,14 @@ module Twit
       return true
     end
 
+    # Reverse of {Twit::Repo#include} -- incorperate changes from the current
+    # branch into another.
+    def include_into other_branch
+      original_branch = current_branch
+      open other_branch
+      include(original_branch)
+    end
+
     # Return true if there is nothing new to commit.
     def nothing_to_commit?
       Dir.chdir @root do

@@ -333,4 +333,22 @@ describe Twit::Repo do
 
   end
 
+  describe "#include_into" do
+    include_context "temp repo"
+    it "calls current_branch, open, and include" do
+      current_branch = "feature"
+      other_branch = "master"
+
+      @repo.stub(:current_branch) { current_branch }
+      @repo.stub(:open)
+      @repo.stub(:include) { |branch| true }
+
+      @repo.include_into other_branch
+
+      expect(@repo).to have_received(:current_branch)
+      expect(@repo).to have_received(:open).with(other_branch)
+      expect(@repo).to have_received(:include).with(current_branch)
+    end
+  end
+
 end

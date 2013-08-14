@@ -108,6 +108,15 @@ describe Twit do
     end
   end
 
+  describe "::include_into" do
+    include_context "stub repo"
+    it "passes to default Repo object" do
+      branch = "my_branch"
+      expect(@repo).to receive(:include_into).with(branch)
+      Twit.include_into branch
+    end
+  end
+
   describe "::current_branch" do
     include_context "stub repo"
     it "passes to default Repo object" do
