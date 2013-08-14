@@ -188,6 +188,15 @@ describe Twit::Repo do
       }.to raise_error(Twit::InvalidParameter)
     end
 
+    it "raises an error when the branch already exists" do
+      branch = "my_branch"
+      File.open("foo", 'w') { |f| f.write("bar\n") }
+      @repo.saveas branch
+      expect {
+        @repo.saveas branch
+      }.to raise_error(Twit::InvalidParameter)
+    end
+
     it "does not raise error in new repository" do
       expect {
         @repo.saveas "newbranch"

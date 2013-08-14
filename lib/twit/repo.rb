@@ -58,6 +58,8 @@ module Twit
           case stderr
           when /not a valid branch name/
             raise InvalidParameter, "#{newbranch} is not a valid branch name"
+          when /already exists/
+            raise InvalidParameter, "#{newbranch} already exists"
           when /Not a git repository/
             raise NotARepositoryError
           else
