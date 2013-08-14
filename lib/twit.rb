@@ -28,14 +28,39 @@ module Twit
     Repo.new dir
   end
 
-  # Save a snapshot on the default repo.
+  # See {Twit::Repo#save}.
   def self.save message
     self.repo.save message
   end
 
-  # PERMANENTLY discard changes to default repo since last save
+  # See {Twit::Repo#saveas}.
+  def self.saveas branch, message = nil
+    self.repo.saveas branch, message
+  end
+
+  # See {Twit::Repo#discard}. (WARNING: PERMANENTLY DESTROYS DATA!)
   def self.discard
     self.repo.discard
+  end
+
+  # See {Twit::Repo#open}.
+  def self.open branch
+    self.repo.open branch
+  end
+
+  # See {Twit::Repo#include}.
+  def self.include branch
+    self.repo.include branch
+  end
+
+  # See {Twit::Repo#list}.
+  def self.list
+    self.repo.list
+  end
+
+  # See {Twit::Repo#current_branch}.
+  def self.current_branch
+    self.repo.current_branch
   end
 
 end

@@ -48,26 +48,71 @@ describe Twit do
 
   end
 
+  shared_context "stub repo" do
+    before do
+      @repo = double('repo')
+      Twit.stub(:repo) { @repo }
+    end
+  end
+
   describe "::save" do
+    include_context "stub repo"
     it "passes to default Repo object" do
       message = "my test commit message"
-      repo = double('repo')
-
-      repo.should_receive(:save).with(message)
-      Twit.should_receive(:repo).and_return(repo)
-
+      expect(@repo).to receive(:save).with(message)
       Twit.save message
     end
   end
 
-  describe "::discard" do
+  describe "::saveas" do
+    include_context "stub repo"
     it "passes to default Repo object" do
-      repo = double('repo')
+      branch = "my_branch"
+      message = "my test commit message"
+      expect(@repo).to receive(:saveas).with(branch, message)
+      Twit.saveas branch, message
+    end
+  end
 
-      repo.should_receive(:discard)
-      Twit.should_receive(:repo).and_return(repo)
-
+  describe "::discard" do
+    include_context "stub repo"
+    it "passes to default Repo object" do
+      expect(@repo).to receive(:discard)
       Twit.discard
+    end
+  end
+
+  describe "::list" do
+    include_context "stub repo"
+    it "passes to default Repo object" do
+      expect(@repo).to receive(:list)
+      Twit.list
+    end
+  end
+
+  describe "::open" do
+    include_context "stub repo"
+    it "passes to default Repo object" do
+      branch = "my_branch"
+      expect(@repo).to receive(:open).with(branch)
+      Twit.open branch
+    end
+  end
+
+  describe "::include" do
+    include_context "stub repo"
+    it "passes to default Repo object" do
+      branch = "my_branch"
+      expect(@repo).to receive(:include).with(branch)
+      Twit.include branch
+    end
+  end
+
+  describe "::current_branch" do
+    include_context "stub repo"
+    it "passes to default Repo object" do
+      expect(@repo).to receive(:current_branch)
+      Twit.current_branch
     end
   end
 
