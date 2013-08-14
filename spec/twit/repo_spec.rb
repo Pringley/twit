@@ -3,6 +3,7 @@ require 'tempfile'
 require 'securerandom'
 
 require 'twit'
+require 'spec_helper'
 
 describe Twit::Repo do
 
@@ -62,17 +63,7 @@ describe Twit::Repo do
 
   describe "#save" do
 
-    before do
-      @tmpdir = Dir.mktmpdir
-      @repo = Twit.init @tmpdir
-      @oldwd = Dir.getwd
-      Dir.chdir @tmpdir
-    end
-
-    after do
-      Dir.chdir @oldwd
-      FileUtils.remove_entry @tmpdir
-    end
+    include_context "temp repo"
 
     context "files in working tree" do
       before do
@@ -112,18 +103,7 @@ describe Twit::Repo do
 
   describe "#list" do
 
-    before do
-      @tmpdir = Dir.mktmpdir
-      @repo = Twit.init @tmpdir
-      @oldwd = Dir.getwd
-      Dir.chdir @tmpdir
-
-    end
-
-    after do
-      Dir.chdir @oldwd
-      FileUtils.remove_entry @tmpdir
-    end
+    include_context "temp repo"
 
     it "should return an Array of branches" do
       # Make sure there's at least one commit on master.
@@ -148,17 +128,7 @@ describe Twit::Repo do
   
   describe "#discard" do
 
-    before do
-      @tmpdir = Dir.mktmpdir
-      @repo = Twit.init @tmpdir
-      @oldwd = Dir.getwd
-      Dir.chdir @tmpdir
-    end
-
-    after do
-      Dir.chdir @oldwd
-      FileUtils.remove_entry @tmpdir
-    end
+    include_context "temp repo"
 
     context "with one commit and dirty working tree" do
 
