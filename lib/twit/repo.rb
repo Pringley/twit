@@ -82,6 +82,23 @@ module Twit
       end
     end
 
+    # Return the current branch.
+    def current_branch
+      Dir.chdir @root do
+        cmd = "git rev-parse --abbrev-ref HEAD"
+        stdout, stderr, status = Open3.capture3 cmd
+        if status != 0
+          case stderr
+          when /unknown revision/
+            raise Error, "could not determine branch of repo with no commits"
+          else
+            raise Error, stderr
+          end
+        end
+        return stdout.strip
+      end
+    end
+
     # Clean the working directory (permanently deletes changes!!!).
     def discard
       Dir.chdir @root do

@@ -208,4 +208,17 @@ describe Twit::Repo do
 
   end
 
+  describe "#current_branch" do
+
+    include_context "temp repo"
+
+    it "returns the name of the current branch" do
+      new_branch = "branch-#{SecureRandom.hex(4)}"
+      File.open("foo", 'w') { |f| f.write("bar\n") }
+      @repo.saveas new_branch
+      expect(@repo.current_branch).to eq(new_branch)
+    end
+
+  end
+
 end
