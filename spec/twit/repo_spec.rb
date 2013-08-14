@@ -246,4 +246,66 @@ describe Twit::Repo do
 
   end
 
+  describe "#include" do
+
+    include_context "temp repo"
+
+    shared_examples "simple merge" do
+      it "will create a merge commit" do
+        expect(`git status`).to include('All conflicts fixed but you are still merging')
+      end
+    end
+
+    context "fast-forward merge" do
+      before do
+        # First commit to master
+        File.open("foo", 'w') { |f| f.write("bar\n") }
+        @repo.save "add foo"
+        # Next commit to feature
+        File.open("spam", 'w') { |f| f.write("eggs\n") }
+        @repo.saveas "feature"
+        @repo.open "master"
+        @mergestatus = @repo.include "feature"
+      end
+      include_examples "simple merge"
+    end
+
+    context "no-conflict merge" do
+      before do
+        # First commit to master
+        File.open("foo", 'w') { |f| f.write("bar\n") }
+        @repo.save "add foo"
+        # Next commit to feature
+        File.open("spam", 'w') { |f| f.write("eggs\n") }
+        @repo.saveas "feature"
+        # Add something else to master
+        @repo.open "master"
+        File.open("else", 'w') { |f| f.write("continued\n") }
+        @repo.save "continue work"
+        @mergestatus = @repo.include "feature"
+      end
+      include_examples "simple merge"
+    end
+
+    context "conflict merge" do
+      before do
+        # First commit to master
+        File.open("foo", 'w') { |f| f.write("bar\n") }
+        @repo.save "add foo"
+        # Next commit to feature
+        File.open("spam", 'w') { |f| f.write("eggs\n") }
+        @repo.saveas "feature"
+        # Conflicting commit to master
+        @repo.open "master"
+        File.open("spam", 'w') { |f| f.write("spam\n") }
+        @repo.save "continue work"
+        @mergestatus = @repo.include "feature"
+      end
+      it "returns false for conflicts" do
+        expect(@mergestatus).to be_false
+      end
+    end
+
+  end
+
 end
