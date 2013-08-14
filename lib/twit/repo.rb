@@ -47,21 +47,25 @@ module Twit
 
     # Return an Array of branches in the repo.
     def list
-      `git branch`.split.map { |s|
-        # Remove trailing/leading whitespace and astericks
-        s.sub('*', '').strip
-      }.reject { |s|
-        # Drop elements created due to trailing newline
-        s.size == 0
-      }
+      Dir.chdir @root do
+        `git branch`.split.map { |s|
+          # Remove trailing/leading whitespace and astericks
+          s.sub('*', '').strip
+        }.reject { |s|
+          # Drop elements created due to trailing newline
+          s.size == 0
+        }
+      end
     end
 
     # Clean the working directory (permanently deletes changes!!!).
     def discard
-      # First, add all files to the index. (Otherwise, we won't discard new files.)
-      `git add --all`
-      # Next, hard reset to revert to the last saved state.
-      `git reset --hard`
+      Dir.chdir @root do
+        # First, add all files to the index. (Otherwise, we won't discard new files.)
+        `git add --all`
+        # Next, hard reset to revert to the last saved state.
+        `git reset --hard`
+      end
     end
 
   end
