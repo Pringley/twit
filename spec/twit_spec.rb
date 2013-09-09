@@ -124,6 +124,16 @@ describe Twit do
     end
   end
 
+  describe "::rewind" do
+    include_context "stub repo"
+    it "passes to default Repo object" do
+      branch = "my_branch"
+      commit_sha = "ab9493c"
+      expect(@repo).to receive(:rewind).with(branch, commit_sha)
+      Twit.rewind branch, commit_sha
+    end
+  end
+
   describe "::current_branch" do
     include_context "stub repo"
     it "passes to default Repo object" do

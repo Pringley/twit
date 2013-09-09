@@ -84,6 +84,11 @@ module Twit
     self.repo.include_into branch
   end
 
+  # See {Twit::Repo#rewind}.
+  def self.rewind new_branch, commit_id
+    self.repo.rewind new_branch, commit_id
+  end
+
   # See {Twit::Repo#list}.
   def self.list
     self.repo.list

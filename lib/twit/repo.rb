@@ -182,6 +182,13 @@ module Twit
       include(original_branch)
     end
 
+    # Create a new branch at the specified commit id.
+    def rewind new_branch, commit_id
+      raise UnsavedChanges unless nothing_to_commit?
+      open(commit_id)
+      saveas(new_branch)
+    end
+
     # Return true if there is nothing new to commit.
     def nothing_to_commit?
       Dir.chdir @root do
