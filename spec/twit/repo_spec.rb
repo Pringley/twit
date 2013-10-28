@@ -28,6 +28,7 @@ describe Twit::Repo do
     end
 
     it "works with a directory argument" do
+      `git init #{@tmpdir}` # only works on initialized repo
       repo = Twit::Repo.new @tmpdir
       expect_root repo.root
     end

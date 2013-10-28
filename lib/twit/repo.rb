@@ -1,4 +1,5 @@
 require 'open3'
+require 'rugged'
 require 'twit/error'
 
 module Twit
@@ -28,23 +29,31 @@ module Twit
         root = stdout.strip
       end
       @root = root
+      @git = Rugged::Repository.new(root)
     end
 
     # Update the snapshot of the current directory.
     def save message
-      Dir.chdir @root do
-        cmd = "git add --all && git commit -m \"#{message}\""
-        stdout, stderr, status = Open3.capture3 cmd
-        if status != 0
-          if /nothing to commit/.match stdout
-            raise NothingToCommitError
-          elsif /Not a git repository/.match stderr
-            raise NotARepositoryError
-          else
-            raise Error, stderr
-          end
-        end
-      end
+      raise NothingToCommitError if nothing_to_commit?
+      @git.index.add_all
+      @git.index.write
+      usr = {name: @git.config['user.name'],
+             email: @git.config['user.email'],
+             time: Time.now}
+      opt = {}
+      opt[:tree] = @git.index.write_tree
+      opt[:author] = usr
+      opt[:committer] = usr
+      opt[:message] = message
+      opt[:parents] = unless @git.empty?
+                        begin
+                          [@git.head.target].compact
+                        rescue Rugged::ReferenceError
+                          []
+                        end
+                      else [] end
+      opt[:update_ref] = 'HEAD'
+      Rugged::Commit.create(@git, opt)
     end
 
     # Save the current state of the repository to a new branch.
@@ -69,7 +78,7 @@ module Twit
       end
       # Next, save any working changes.
       begin
-        Twit.save message
+        save message
       rescue NothingToCommitError
         # New changes are not required for saveas.
       end
