@@ -9,4 +9,5 @@ rvm:
 
 script:
   - git config --global user.name 'The twit tests are as fragile as rugged'
+  - git config --global user.email 'fragile@tests.com'
   - bundle exec rake
