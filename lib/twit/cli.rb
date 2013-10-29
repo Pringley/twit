@@ -113,6 +113,18 @@ module Twit
     # See {Twit::Repo#rewind}.
     def rewind amount
       begin
+        unless Twit.nothing_to_commit?
+          return if no? "You have unsaved changes to your branch. Proceed?"
+        end
+        say "This branch will be rewound by #{amount} save points."
+        if yes? "Would you like to save a copy of these last #{amount} points?"
+          oldbranch = Twit.current_branch
+          newbranch = ask "Enter name for the copy branch:"
+          Twit.saveas newbranch
+          Twit.open oldbranch
+        elsif no? "These #{amount} changes may be lost forever! Are you sure?"
+          return
+        end
         Twit.rewind amount.to_i
       rescue Error => e
         say "Error: #{e.message}"
@@ -123,6 +135,16 @@ module Twit
     # See {Twit::Repo#discard}.
     def discard
       begin
+        say "All changes since last save will be reverted."
+        if yes? "Would you like to copy the changes in a different branch instead?"
+          oldbranch = Twit.current_branch
+          newbranch = ask "Enter name for the copy branch:"
+          Twit.saveas newbranch
+          Twit.open oldbranch
+          return
+        elsif no? "These changes will be lost forever! Are you sure?"
+          return
+        end
         Twit.discard
       rescue Error => e
         say "Error: #{e.message}"
