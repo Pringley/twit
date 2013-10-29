@@ -27,12 +27,8 @@ module Twit
       return
     end
 
-    Dir.chdir dir do
-      stdout, stderr, status = Open3.capture3 "git init"
-      if status != 0
-        raise Error, stderr
-      end
-    end
+    Rugged::Repository.init_at(dir)
+
     Repo.new dir
   end
 
