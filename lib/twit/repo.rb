@@ -124,20 +124,10 @@ module Twit
 
     # Open a branch.
     def open branch
-      Dir.chdir @root do
-        cmd = "git checkout \"#{branch}\""
-        stdout, stderr, status = Open3.capture3 cmd
-        if status != 0
-          case stderr
-          when /Not a git repository/
-            raise NotARepositoryError
-          when /pathspec '#{branch}' did not match any/
-            raise InvalidParameter, "#{branch} does not exist"
-          else
-            raise Error, stderr
-          end
-        end
-      end
+      ref = Rugged::Branch.lookup(@git, branch)
+      raise InvalidParameter, "#{branch} is not a branch" if ref.nil?
+      @git.head = ref.canonical_name
+      @git.reset('HEAD', :hard)
     end
 
     # Clean the working directory (permanently deletes changes!!!).
