@@ -109,6 +109,16 @@ module Twit
       say "Use git merge instead!"
     end
 
+    desc "rewind", "PERMANTENTLY rewind branch to a previous commit"
+    # See {Twit::Repo#rewind}.
+    def rewind amount
+      begin
+        Twit.rewind amount.to_i
+      rescue Error => e
+        say "Error: #{e.message}"
+      end
+    end
+
     desc "discard", "PERMANTENTLY delete all changes since last save"
     # See {Twit::Repo#discard}.
     def discard
