@@ -17,19 +17,14 @@ module Twit
     # raise {Twit::NotARepositoryError}.
     def initialize root = nil
       if root.nil?
-        stdout, stderr, status = Open3.capture3 "git rev-parse --show-toplevel"
-        if status != 0
-          case stderr
-          when /Not a git repository/
-            raise NotARepositoryError
-          else
-            raise Error, stderr
-          end
+        begin
+          root = Rugged::Repository.discover(Dir.getwd)
+        rescue Rugged::RepositoryError
+          raise NotARepositoryError
         end
-        root = stdout.strip
       end
-      @root = root
       @git = Rugged::Repository.new(root)
+      @root = @git.workdir
     end
 
     # Update the snapshot of the current directory.
