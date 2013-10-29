@@ -115,21 +115,11 @@ module Twit
 
     # Return the current branch.
     def current_branch
-      Dir.chdir @root do
-        cmd = "git rev-parse --abbrev-ref HEAD"
-        stdout, stderr, status = Open3.capture3 cmd
-        if status != 0
-          case stderr
-          when /unknown revision/
-            raise Error, "could not determine branch of repo with no commits"
-          when /Not a git repository/
-            raise NotARepositoryError
-          else
-            raise Error, stderr
-          end
-        end
-        return stdout.strip
+      ref = Rugged::Reference.lookup(@git, 'HEAD').resolve
+      if not ref.branch?
+        raise Error, "Not currently on a branch."
       end
+      ref.name.split('/').last
     end
 
     # Open a branch.
