@@ -1,5 +1,6 @@
 require 'thor'
 require 'twit'
+require 'twit/gui'
 
 module Twit
 
@@ -116,6 +117,12 @@ module Twit
       rescue Error => e
         say "Error: #{e.message}"
       end
+    end
+
+    desc "gui", "Start Twit's graphical user interface"
+    # See {Twit::GUI}.
+    def gui
+      Twit::GUI.main
     end
 
   end
