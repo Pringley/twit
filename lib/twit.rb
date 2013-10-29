@@ -66,8 +66,8 @@ module Twit
   end
 
   # See {Twit::Repo#rewind}.
-  def self.rewind new_branch, commit_id
-    self.repo.rewind new_branch, commit_id
+  def self.rewind amount
+    self.repo.rewind amount
   end
 
   # See {Twit::Repo#list}.

@@ -284,15 +284,10 @@ describe Twit::Repo do
       @repo.save "second commit"
       @second_id = `git rev-parse HEAD`.strip
       # Rewind to the first.
-      @newbranch = 'oldmaster'
-      @repo.rewind @newbranch, @first_id
+      @repo.rewind 1
     end
 
-    it "creates a new branch" do
-      expect(@repo.current_branch).to eq(@newbranch)
-    end
-
-    it "sets HEAD to the specified commit" do
+    it "sets HEAD to the first commit" do
       expect(`git rev-parse HEAD`.strip).to eq(@first_id)
     end
 

@@ -115,15 +115,14 @@ module Twit
       @git.reset('HEAD', :hard)
     end
 
-    # Create a new branch at the specified commit id.
-    def rewind new_branch, commit_id
+    # Create a new branch at the specified commit id (may permanently lose
+    # commits!!!).
+    def rewind amount
       raise UnsavedChanges unless nothing_to_commit?
-      # Set HEAD to the specified commit.
-      Rugged::Reference.create(@git, 'HEAD', commit_id, true)
-      # Reset to that commit.
-      discard
-      # Create a new branch pointing the old commit.
-      saveas(new_branch)
+      raise ArgumentError, "Expected integer amount" unless amount.is_a? Integer
+      @git.index.add_all
+      @git.index.write
+      @git.reset("HEAD~#{amount}", :hard)
     end
 
     # Return true if there is nothing new to commit.
