@@ -6,3 +6,7 @@ language: ruby
 rvm:
   - 1.9.3
   - 2.0.0
+
+script:
+  - git config --global user.name 'The twit tests are as fragile as rugged'
+  - bundle exec rake
