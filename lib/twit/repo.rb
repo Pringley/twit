@@ -132,20 +132,11 @@ module Twit
 
     # Clean the working directory (permanently deletes changes!!!).
     def discard
-      Dir.chdir @root do
-        # First, add all files to the index. (Otherwise, we won't discard new
-        # files.) Then, hard reset to revert to the last saved state.
-        cmd = "git add --all && git reset --hard"
-        stdout, stderr, status = Open3.capture3 cmd
-        if status != 0
-          case stderr
-          when /Not a git repository/
-            raise NotARepositoryError
-          else
-            raise Error, stderr
-          end
-        end
-      end
+      # First, add all files to the index. (Otherwise, we won't discard new
+      # files.) Then, hard reset to revert to the last saved state.
+      @git.index.add_all
+      @git.index.write
+      @git.reset('HEAD', :hard)
     end
 
     # Incorperate changes from another branch, but do not commit them.
