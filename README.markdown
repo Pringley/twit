@@ -1,5 +1,7 @@
 # Twit: training wheels for Git
 
+[![Build Status](https://travis-ci.org/Pringley/twit.png)](https://travis-ci.org/Pringley/twit)
+
 Twit is a wrapper for [Git](http://git-scm.com) that abstracts concepts that
 many newcomers find tedious or confusing.
 
