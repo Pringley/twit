@@ -116,35 +116,6 @@ module Twit
       @git.reset('HEAD', :hard)
     end
 
-    # Incorperate changes from another branch, but do not commit them.
-    #
-    # Return true if the merge was successful without conflicts; false if there
-    # are conflicts.
-    def include other_branch
-      Dir.chdir @root do
-        cmd = "git merge --no-ff --no-commit \"#{other_branch}\""
-        stdout, stderr, status = Open3.capture3 cmd
-        if status != 0
-          if /Not a git repository/.match stderr
-            raise NotARepositoryError
-          elsif /Automatic merge failed/.match stdout
-            return false
-          else
-            raise Error, stderr
-          end
-        end
-      end
-      return true
-    end
-
-    # Reverse of {Twit::Repo#include} -- incorperate changes from the current
-    # branch into another.
-    def include_into other_branch
-      original_branch = current_branch
-      open other_branch
-      include(original_branch)
-    end
-
     # Return true if there is nothing new to commit.
     def nothing_to_commit?
       @git.status do |file, status|
