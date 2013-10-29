@@ -147,20 +147,10 @@ module Twit
 
     # Return true if there is nothing new to commit.
     def nothing_to_commit?
-      Dir.chdir @root do
-        cmd = "git status"
-        stdout, stderr, status = Open3.capture3 cmd
-        if status != 0
-          case stderr
-          when /Not a git repository/
-            raise NotARepositoryError
-          else
-            raise Error, stderr
-          end
-        end
-        # Check if status indicates nothing to commit
-        return /nothing to commit/.match stdout
+      @git.status do |file, status|
+        return false unless status.empty?
       end
+      return true
     end
 
   end
