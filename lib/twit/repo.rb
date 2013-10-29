@@ -87,25 +87,7 @@ module Twit
 
     # Return an Array of branches in the repo.
     def list
-      Dir.chdir @root do
-        cmd = "git branch"
-        stdout, stderr, status = Open3.capture3 cmd
-        if status != 0
-          case stderr
-          when /Not a git repository/
-            raise NotARepositoryError
-          else
-            raise Error, stderr
-          end
-        end
-        return stdout.split.map { |s|
-          # Remove trailing/leading whitespace and astericks
-          s.sub('*', '').strip
-        }.reject { |s|
-          # Drop elements created due to trailing newline
-          s.size == 0
-        }
-      end
+      @git.branches.map(&:name)
     end
 
     # Return the current branch.
