@@ -52,7 +52,7 @@ module Twit
           Twit.saveas branch, message
         rescue InvalidParameter => e
           if /already exists/.match e.message
-            say "Cannot saveas to existing branch. See \"twit help include_into\""
+            say "Cannot saveas to existing branch. Try a git merge!"
           else
             say "Error: #{e.message}"
           end
@@ -95,44 +95,17 @@ module Twit
     end
 
     desc "include", "Integrate changes from another branch"
-    # See {Twit::Repo#include}.
+    # Deprecated: use git merge instead.
     def include other_branch = nil
-      while other_branch.nil? || other_branch.strip == ""
-        other_branch = ask "Please enter the name of the branch to pull changes from:"
-      end
-      begin
-        @success = Twit.include other_branch
-      rescue Error => e
-        say "Error: #{e.message}"
-        return
-      end
-      if @success
-        say "Changes from #{other_branch} successfully included into #{Twit.current_branch}."
-        say "Use \"twit save\" to save them."
-      else
-        say "Conflicts detected! Fix them, then use \"twit save\" to save the changes."
-      end
+      say "This function has been deprecated."
+      say "Use git merge instead!"
     end
 
     desc "include_into", "Integrate changes into another branch"
-    # See {Twit::Repo#include}.
+    # Deprecated: use git merge instead.
     def include_into other_branch = nil
-      while other_branch.nil? || other_branch.strip == ""
-        other_branch = ask "Please enter the name of the branch to push changes into:"
-      end
-      begin
-        @original = Twit.current_branch
-        @success = Twit.include_into other_branch
-      rescue Error => e
-        say "Error: #{e.message}"
-        return
-      end
-      if @success
-        say "Changes from #{@original} successfully included into #{other_branch}."
-        say "Use \"twit save\" to save them."
-      else
-        say "Conflicts detected! Fix them, then use \"twit save\" to save the changes."
-      end
+      say "This function has been deprecated."
+      say "Use git merge instead!"
     end
 
     desc "discard", "PERMANTENTLY delete all changes since last save"

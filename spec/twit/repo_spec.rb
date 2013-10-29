@@ -28,6 +28,7 @@ describe Twit::Repo do
     end
 
     it "works with a directory argument" do
+      `git init #{@tmpdir}` # only works on initialized repo
       repo = Twit::Repo.new @tmpdir
       expect_root repo.root
     end
@@ -269,86 +270,6 @@ describe Twit::Repo do
       }.to raise_error(Twit::InvalidParameter)
     end
 
-  end
-
-  describe "#include" do
-
-    include_context "temp repo"
-
-    shared_examples "simple merge" do
-      it "will create a merge commit" do
-        expect(`git status`).to include('All conflicts fixed but you are still merging')
-      end
-    end
-
-    context "fast-forward merge" do
-      before do
-        # First commit to master
-        File.open("foo", 'w') { |f| f.write("bar\n") }
-        @repo.save "add foo"
-        # Next commit to feature
-        File.open("spam", 'w') { |f| f.write("eggs\n") }
-        @repo.saveas "feature"
-        @repo.open "master"
-        @mergestatus = @repo.include "feature"
-      end
-      include_examples "simple merge"
-    end
-
-    context "no-conflict merge" do
-      before do
-        # First commit to master
-        File.open("foo", 'w') { |f| f.write("bar\n") }
-        @repo.save "add foo"
-        # Next commit to feature
-        File.open("spam", 'w') { |f| f.write("eggs\n") }
-        @repo.saveas "feature"
-        # Add something else to master
-        @repo.open "master"
-        File.open("else", 'w') { |f| f.write("continued\n") }
-        @repo.save "continue work"
-        @mergestatus = @repo.include "feature"
-      end
-      include_examples "simple merge"
-    end
-
-    context "conflict merge" do
-      before do
-        # First commit to master
-        File.open("foo", 'w') { |f| f.write("bar\n") }
-        @repo.save "add foo"
-        # Next commit to feature
-        File.open("spam", 'w') { |f| f.write("eggs\n") }
-        @repo.saveas "feature"
-        # Conflicting commit to master
-        @repo.open "master"
-        File.open("spam", 'w') { |f| f.write("spam\n") }
-        @repo.save "continue work"
-        @mergestatus = @repo.include "feature"
-      end
-      it "returns false for conflicts" do
-        expect(@mergestatus).to be_false
-      end
-    end
-
-  end
-
-  describe "#include_into" do
-    include_context "temp repo"
-    it "calls current_branch, open, and include" do
-      current_branch = "feature"
-      other_branch = "master"
-
-      @repo.stub(:current_branch) { current_branch }
-      @repo.stub(:open)
-      @repo.stub(:include) { |branch| true }
-
-      @repo.include_into other_branch
-
-      expect(@repo).to have_received(:current_branch)
-      expect(@repo).to have_received(:open).with(other_branch)
-      expect(@repo).to have_received(:include).with(current_branch)
-    end
   end
 
 end

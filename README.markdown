@@ -75,15 +75,6 @@ Equivalent to: `git checkout -b <NEW_BRANCH>` then `twit save`
 
 Equivalent to: `git checkout <branch>`
 
-### `include` -- incorperate changes from another branch
-
-    twit include [OTHER_BRANCH]
-
-Incorperate changes from another branch, but do not save them yet. (The user
-can resolve any conflicts and then run `twit save` themselves.)
-
-Equivalent to: `git merge --no-ff --no-commit [OTHER_BRANCH]`
-
 ### `discard` -- permanently delete unsaved changes
 
     twit discard

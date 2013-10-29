@@ -2,7 +2,7 @@ require "twit/version"
 require "twit/repo"
 require "twit/error"
 
-require 'open3'
+require "rugged"
 
 # This module exposes twit commands as methods.
 module Twit
@@ -27,12 +27,8 @@ module Twit
       return
     end
 
-    Dir.chdir dir do
-      stdout, stderr, status = Open3.capture3 "git init"
-      if status != 0
-        raise Error, stderr
-      end
-    end
+    Rugged::Repository.init_at(dir)
+
     Repo.new dir
   end
 
@@ -41,17 +37,12 @@ module Twit
   # If no argument is supplied, use the working directory.
   def self.is_repo? dir = nil
     dir ||= Dir.getwd
-    Dir.chdir dir do
-      stdout, stderr, status = Open3.capture3 "git status"
-      if status != 0
-        if /Not a git repository/.match stderr
-          return false
-        else
-          raise Error, stderr
-        end
-      end
-      return true
+    begin
+      root = Rugged::Repository.discover(dir)
+    rescue Rugged::RepositoryError
+      return false
     end
+    return true
   end
 
   # See {Twit::Repo#save}.
@@ -72,16 +63,6 @@ module Twit
   # See {Twit::Repo#open}.
   def self.open branch
     self.repo.open branch
-  end
-
-  # See {Twit::Repo#include}.
-  def self.include branch
-    self.repo.include branch
-  end
-
-  # See {Twit::Repo#include_into}.
-  def self.include_into branch
-    self.repo.include_into branch
   end
 
   # See {Twit::Repo#list}.
