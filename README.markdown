@@ -75,6 +75,14 @@ Equivalent to: `git checkout -b <NEW_BRANCH>` then `twit save`
 
 Equivalent to: `git checkout <branch>`
 
+### `rewind` -- permanently rewind a branch
+
+    twit rewind [AMOUNT]
+
+**Permanently** move a branch back AMOUNT saves.
+
+Equivalent to: `git reset --hard HEAD~<amount>`
+
 ### `discard` -- permanently delete unsaved changes
 
     twit discard
