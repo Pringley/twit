@@ -41,17 +41,12 @@ module Twit
   # If no argument is supplied, use the working directory.
   def self.is_repo? dir = nil
     dir ||= Dir.getwd
-    Dir.chdir dir do
-      stdout, stderr, status = Open3.capture3 "git status"
-      if status != 0
-        if /Not a git repository/.match stderr
-          return false
-        else
-          raise Error, stderr
-        end
-      end
-      return true
+    begin
+      root = Rugged::Repository.discover(dir)
+    rescue Rugged::RepositoryError
+      return false
     end
+    return true
   end
 
   # See {Twit::Repo#save}.
