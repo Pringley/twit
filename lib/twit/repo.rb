@@ -59,23 +59,29 @@ module Twit
     # Save the current state of the repository to a new branch.
     def saveas newbranch, message = nil
       message ||= "Create new branch: #{newbranch}"
-      # First, create the new branch and switch to it.
-      Dir.chdir @root do
-        cmd = "git checkout -b \"#{newbranch}\""
-        stdout, stderr, status = Open3.capture3 cmd
-        if status != 0
-          case stderr
-          when /not a valid branch name/
-            raise InvalidParameter, "#{newbranch} is not a valid branch name"
-          when /already exists/
-            raise InvalidParameter, "#{newbranch} already exists"
-          when /Not a git repository/
-            raise NotARepositoryError
-          else
-            raise Error, stderr
-          end
+      begin
+        if @git.empty?
+          # For an empty repo, we can "create a new branch" by setting HEAD to
+          # a symbolic reference to the new branch. Then, the next commit will
+          # create that branch (instead of master).
+          Rugged::Reference.create(@git, 'HEAD',
+               "refs/heads/#{newbranch}", true)
+        else
+          # For a non-empty repo, we just create a new branch and switch to it.
+          branch = @git.create_branch newbranch
+          @git.head = branch.canonical_name
+        end
+      rescue Rugged::ReferenceError => error
+        case error.message
+        when /is not valid/
+          raise InvalidParameter, "#{newbranch} is not a valid branch name"
+        when /already exists/
+          raise InvalidParameter, "#{newbranch} already exists"
+        else
+          raise Error, "Internal Rugged error: #{error.message}"
         end
       end
+
       # Next, save any working changes.
       begin
         save message
