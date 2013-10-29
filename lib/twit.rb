@@ -2,7 +2,7 @@ require "twit/version"
 require "twit/repo"
 require "twit/error"
 
-require 'open3'
+require "rugged"
 
 # This module exposes twit commands as methods.
 module Twit
