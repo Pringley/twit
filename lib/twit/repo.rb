@@ -115,6 +115,17 @@ module Twit
       @git.reset('HEAD', :hard)
     end
 
+    # Create a new branch at the specified commit id.
+    def rewind new_branch, commit_id
+      raise UnsavedChanges unless nothing_to_commit?
+      # Set HEAD to the specified commit.
+      Rugged::Reference.create(@git, 'HEAD', commit_id, true)
+      # Reset to that commit.
+      discard
+      # Create a new branch pointing the old commit.
+      saveas(new_branch)
+    end
+
     # Return true if there is nothing new to commit.
     def nothing_to_commit?
       @git.status do |file, status|
