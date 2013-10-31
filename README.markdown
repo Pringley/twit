@@ -155,7 +155,7 @@ students.
 
 Initialize a new git repository in the current directory.
 
-Equivalent to: `git init`
+Similar to: `git init`
 
 ### `save` -- commit all new changes to the current branch
 
@@ -165,19 +165,22 @@ Take a snapshot of all files in the directory.
 
 Any changes on the working tree will be committed to the current branch.
 
-Equivalent to: `git add --all && git commit -m <DESCRIBE_CHANGES>`
+Similar to: `git add --all && git commit -m <DESCRIBE_CHANGES>`
 
 ### `saveas` -- commit all new changes to a new branch
 
     twit saveas [NEW_BRANCH] [DESCRIBE_CHANGES]
 
-Equivalent to: `git checkout -b <NEW_BRANCH>` then `twit save`
+Similar to: `git checkout -b <NEW_BRANCH>` then `twit save`
 
 ### `open` -- open another branch
 
     twit open [BRANCH]
 
-Equivalent to: `git checkout <branch>`
+Similar to: `git checkout <branch>`
+
+Note: you can't use `twit open` to checkout a lone commit in detached HEAD
+mode.
 
 ### `rewind` -- permanently rewind a branch
 
@@ -185,7 +188,7 @@ Equivalent to: `git checkout <branch>`
 
 **Permanently** move a branch back AMOUNT saves.
 
-Equivalent to: `git reset --hard HEAD~<amount>`
+Similar to: `git reset --hard HEAD~<amount>`
 
 ### `discard` -- permanently delete unsaved changes
 
@@ -193,13 +196,13 @@ Equivalent to: `git reset --hard HEAD~<amount>`
 
 **Permanently** delete any unsaved changes to the current branch. Be careful!
 
-Equivalent to: `git reset --hard`
+Similar to: `git reset --hard`
 
 ### `list` -- show all branches
 
     twit list
 
-Equivalent to: `git branch`
+Similar to: `git branch`
 
 ## API
 
