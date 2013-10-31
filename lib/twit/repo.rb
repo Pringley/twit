@@ -86,7 +86,7 @@ module Twit
 
     # Return an Array of branches in the repo.
     def list
-      @git.branches.map(&:name)
+      Rugged::Branch.each_name(@git, :local).to_a
     end
 
     # Return the current branch.
