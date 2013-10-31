@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Twit by Pringley</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Twit</h1>
+          <h2>Training wheels for Git.</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/Pringley/twit/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/Pringley/twit/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/Pringley/twit" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <p>Twit is an accessible version-control system based on the widely popular
+<a href="http://git-scm.com">Git</a> program.</p>
+
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>To install, simply run:</p>
+
+<pre><code>gem install twit
+</code></pre>
+
+<p>(On some systems, this may require <code>sudo</code>.)</p>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Version control allows you to keep track of <strong>changes</strong> to a project over time.</p>
+
+<h3>
+<a name="example-roll-back-with-rewind" class="anchor" href="#example-roll-back-with-rewind"><span class="octicon octicon-link"></span></a>Example: roll back with <code>rewind</code>
+</h3>
+
+<p>Bob is working on an essay for English class. He creates a folder called
+<code>myessay</code> and wants to track his changes.</p>
+
+<p>First, he needs to turn that folder into a version-controlled <strong>repository</strong>.
+This is done with the <code>init</code> command:</p>
+
+<pre><code>cd myessay
+twit init
+</code></pre>
+
+<p>Then, Bob writes an initial draft of his essay in <code>myessay/essay.txt</code>. He can
+then take a snapshot of his first draft using:</p>
+
+<pre><code>twit save
+</code></pre>
+
+<p>Each time he makes some edits to the paper, he runs <code>twit save</code> again.</p>
+
+<p>One day, he decides to restructure the essay entirely. He makes several <code>save</code>s
+with his big changes, deleting large amounts of text.</p>
+
+<p>The next day he realizes that his restructuring effort was a huge mistake and
+wants to recover the way his essay used to be. With version control, you can
+roll back to any previous save point you've marked with <code>save</code>.</p>
+
+<p>Bob uses <code>rewind</code> to go back three <code>save</code>s ago:</p>
+
+<pre><code>twit rewind 3
+</code></pre>
+
+<p><strong>Note:</strong> using version control and frequent <code>save</code>s has a few benefits over
+simply making a bunch of copies of your folder. One such benefit is space --
+Twit (and its backend Git) only saves <em>changes</em> to your repository rather than
+copying the entire thing. If you have a project with big files, this can save a
+lot of hard disk space. Also, just typing <code>twit save</code> is faster than copying,
+pasting, and renaming your new folder with some sort of label so you can find
+it later. This encourages you to make more checkpoints, which gives you more
+points to roll back to.</p>
+
+<h3>
+<a name="example-using-branches-for-a-computer-science-class" class="anchor" href="#example-using-branches-for-a-computer-science-class"><span class="octicon octicon-link"></span></a>Example: using branches for a computer science class</h3>
+
+<p><strong>Branches</strong> are like bookmarks at different save points. They allow you to
+quickly switch between different versions of your repository.</p>
+
+<p>In his computer science class, Bob has a three-part computer lab assignment. In
+the first part, he must write a program, and in the second and third parts, he
+must modify the program he wrote in two different ways.</p>
+
+<p>Bob creates a folder called <code>cslab</code> and initializes it as a repository.</p>
+
+<pre><code>cd cslab
+twit init
+</code></pre>
+
+<p>He completes the first part of the assignment. He now uses <code>saveas</code> to create a
+new branch containing his completed part one code.</p>
+
+<pre><code>twit saveas part1
+</code></pre>
+
+<p>He then works on part two. Once that's working, he can create <em>another</em> branch:</p>
+
+<pre><code>twit saveas part2
+</code></pre>
+
+<p>Now, he has a problem -- the code he wrote for part two is making it really
+hard to finish part three! That's okay -- it's easy to switch back to the part
+one branch.</p>
+
+<pre><code>twit open part1
+</code></pre>
+
+<p>Now the repository is reverted back to the way it was in part one. (The part
+two code is still saved in the <code>part2</code> branch -- it's just stored elsewhere for
+now.)</p>
+
+<p>From the part one code, Bob can finish the thirt part and run</p>
+
+<pre><code>twit saveas part3
+</code></pre>
+
+<p>Now there are three branches: <code>part1</code>, <code>part2</code>, and <code>part3</code>. Any of them can be
+accessed with <code>twit open</code>, so Bob can easily show the professor his work.</p>
+
+<h2>
+<a name="motivation-written-for-programmers" class="anchor" href="#motivation-written-for-programmers"><span class="octicon octicon-link"></span></a>Motivation (written for programmers)</h2>
+
+<p>Twit is a wrapper for <a href="http://git-scm.com">Git</a> that abstracts concepts that
+many newcomers find tedious or confusing (at the cost of significant
+flexibility).</p>
+
+<p>When explaining version control to newcomers, the benefits are often unclear
+amid the complicated rules and syntax of a powerful tool like Git. Twit aims to
+provide an <em>easy and functional</em> demonstration of the usefulness of a branching
+version control system.</p>
+
+<p>For example, you can say that "version control allows you to save snapshots of
+your project history." However, in order to do this, you need to understand
+Git's two-step stage-then-commit workflow, with all its corner cases regarding
+new/deleted/moved files. <code>git commit -a</code> ignores new files, <code>git add .</code> won't
+stage file deletions, etc -- even <code>git add --all</code> has to be run from the root
+of the working tree.</p>
+
+<p>Instead, Twit exposes a simple command to create a new commit with a snapshot
+of the repository:</p>
+
+<pre><code>twit save
+</code></pre>
+
+<p>This stages <em>all</em> changes (including new files and deletions) and creates a
+commit, prompting the user for a commit message if needed.</p>
+
+<p>To create a new branch (and save any changes to the new branch as well):</p>
+
+<pre><code>twit saveas my_new_branch
+</code></pre>
+
+<p>If the user forgets to supply the branch argument and just uses <code>twit saveas</code>,
+the CLI will nicely prompt them for a new branch name.</p>
+
+<p>This quick-and-easy approach allows a new user to get started using version
+control right away, without having to learn Git's minutiae.</p>
+
+<p>However, this simple program is <strong>not</strong> meant to replace Git for the power
+user. The interface was designed to be user-friendly at the cost of
+flexibility.</p>
+
+<p>Git has a staging area for a reason -- atomic commits are important. Using
+<code>twit save</code> will almost certainly result in commits with batches of changes
+mangled together. <em>That's okay.</em> Twit isn't for professionals -- it's Git for
+your mother to write a book, or for non-coders to add documentation to an open
+source project. Best of all, <strong>the repository is still Git underneath</strong>, so
+people can transition easily.</p>
+
+<p>If you are a programmer, you should probably just buckle down and <a href="http://gitref.org">learn
+git</a>. Instead, Twit serves as an introduction to version
+control for users that would probably never learn Git, like writers or
+students.</p>
+
+<h2>
+<a name="command-reference" class="anchor" href="#command-reference"><span class="octicon octicon-link"></span></a>Command Reference</h2>
+
+<h3>
+<a name="init----create-a-new-repository" class="anchor" href="#init----create-a-new-repository"><span class="octicon octicon-link"></span></a><code>init</code> -- create a new repository</h3>
+
+<pre><code>twit init
+</code></pre>
+
+<p>Initialize a new git repository in the current directory.</p>
+
+<p>Equivalent to: <code>git init</code></p>
+
+<h3>
+<a name="save----commit-all-new-changes-to-the-current-branch" class="anchor" href="#save----commit-all-new-changes-to-the-current-branch"><span class="octicon octicon-link"></span></a><code>save</code> -- commit all new changes to the current branch</h3>
+
+<pre><code>twit save [DESCRIBE_CHANGES]
+</code></pre>
+
+<p>Take a snapshot of all files in the directory.</p>
+
+<p>Any changes on the working tree will be committed to the current branch.</p>
+
+<p>Equivalent to: <code>git add --all &amp;&amp; git commit -m &lt;DESCRIBE_CHANGES&gt;</code></p>
+
+<h3>
+<a name="saveas----commit-all-new-changes-to-a-new-branch" class="anchor" href="#saveas----commit-all-new-changes-to-a-new-branch"><span class="octicon octicon-link"></span></a><code>saveas</code> -- commit all new changes to a new branch</h3>
+
+<pre><code>twit saveas [NEW_BRANCH] [DESCRIBE_CHANGES]
+</code></pre>
+
+<p>Equivalent to: <code>git checkout -b &lt;NEW_BRANCH&gt;</code> then <code>twit save</code></p>
+
+<h3>
+<a name="open----open-another-branch" class="anchor" href="#open----open-another-branch"><span class="octicon octicon-link"></span></a><code>open</code> -- open another branch</h3>
+
+<pre><code>twit open [BRANCH]
+</code></pre>
+
+<p>Equivalent to: <code>git checkout &lt;branch&gt;</code></p>
+
+<h3>
+<a name="rewind----permanently-rewind-a-branch" class="anchor" href="#rewind----permanently-rewind-a-branch"><span class="octicon octicon-link"></span></a><code>rewind</code> -- permanently rewind a branch</h3>
+
+<pre><code>twit rewind [AMOUNT]
+</code></pre>
+
+<p><strong>Permanently</strong> move a branch back AMOUNT saves.</p>
+
+<p>Equivalent to: <code>git reset --hard HEAD~&lt;amount&gt;</code></p>
+
+<h3>
+<a name="discard----permanently-delete-unsaved-changes" class="anchor" href="#discard----permanently-delete-unsaved-changes"><span class="octicon octicon-link"></span></a><code>discard</code> -- permanently delete unsaved changes</h3>
+
+<pre><code>twit discard
+</code></pre>
+
+<p><strong>Permanently</strong> delete any unsaved changes to the current branch. Be careful!</p>
+
+<p>Equivalent to: <code>git reset --hard</code></p>
+
+<h3>
+<a name="list----show-all-branches" class="anchor" href="#list----show-all-branches"><span class="octicon octicon-link"></span></a><code>list</code> -- show all branches</h3>
+
+<pre><code>twit list
+</code></pre>
+
+<p>Equivalent to: <code>git branch</code></p>
+
+<h2>
+<a name="api" class="anchor" href="#api"><span class="octicon octicon-link"></span></a>API</h2>
+
+<p>All command-line functions are available for use as a Ruby library as well.</p>
+
+<pre><code>require 'twit'
+
+# Create a new repository
+repo = Twit.init
+
+# Make some changes to the directory
+File.open('foo', 'w') { |f| f.write('bar\n') }
+
+# Take a snapshot
+Twit.save "Add some foo"
+
+# Create a new branch
+Twit.saveas "feature-branch"
+</code></pre>
+        </section>
+
+        <footer>
+          Twit is maintained by <a href="https://github.com/Pringley">Pringley</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
