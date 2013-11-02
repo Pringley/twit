@@ -95,14 +95,14 @@ module Twit
       end
     end
 
-    desc "include", "Integrate changes from another branch"
+    desc "include", "Deprecated after v0.0.2"
     # Deprecated: use git merge instead.
     def include other_branch = nil
       say "This function has been deprecated."
       say "Use git merge instead!"
     end
 
-    desc "include_into", "Integrate changes into another branch"
+    desc "include_into", "Deprecated after v0.0.2"
     # Deprecated: use git merge instead.
     def include_into other_branch = nil
       say "This function has been deprecated."
